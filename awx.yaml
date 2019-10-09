@@ -1,0 +1,20 @@
+- hosts: awx
+  become: true
+
+  vars:
+    nodejs_version: "6.x"
+    pip_install_packages:
+      # docker-py causes installation to fail
+      # - name: docker-py 
+      - name: docker
+      - name: docker-compose
+    awx_run_install_playbook: yes
+
+  roles:
+    - geerlingguy.repo-epel
+    - geerlingguy.git
+    - geerlingguy.ansible
+    - geerlingguy.docker
+    - geerlingguy.pip
+    - geerlingguy.nodejs
+    - geerlingguy.awx
