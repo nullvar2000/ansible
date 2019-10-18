@@ -18,16 +18,14 @@
       - deb http://security.debian.org/debian-security buster/updates main contrib
       - deb-src http://ftp.us.debian.org/debian buster main contrib non-free
       - deb-src http://security.debian.org/debian-security buster/updates main contrib
-    disabled_repos:
-      - cdrom:[Debian GNU/Linux 10.0.0 _Buster_ - Official amd64 DVD Binary-1 20190706-10:24]/ buster contrib main
 
   tasks:
 
-    - name: Disable repos
-      apt_repository:
-        repo: "{{ item }}"
-        state: absent
-      loop: "{{ disabled_repos }}"
+    - name: Disable cdrom repo
+      lineinfile:
+        path: /etc/apt/sources.list
+        regexp: '(.*cdrom.*)'
+        replace: '#\1'
 
     - name: Enable repos
       apt_repository:
