@@ -23,17 +23,17 @@
 
   tasks:
 
-    - name: Enable repos
-      apt_repository:
-        repo: "{{ item }}" 
-        state: present
-      loop: "{{ enabled_repos }}"
-
     - name: Disable repos
       apt_repository:
         repo: "{{ item }}"
         state: absent
       loop: "{{ disabled_repos }}"
+
+    - name: Enable repos
+      apt_repository:
+        repo: "{{ item }}" 
+        state: present
+      loop: "{{ enabled_repos }}"
 
     - name: Update apt
       apt: update_cache=yes
