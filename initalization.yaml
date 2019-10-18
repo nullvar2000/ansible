@@ -22,7 +22,7 @@
   tasks:
 
     - name: Disable cdrom repo
-      lineinfile:
+      replace:
         path: /etc/apt/sources.list
         regexp: '(.*cdrom.*)'
         replace: '#\1'
