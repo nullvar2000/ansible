@@ -11,7 +11,7 @@
   gather_facts: false
   vars:
     create_user: ansible
-    copy_local_key: files/id_ecdsa.pub
+    copy_local_key: files/id_rsa.pub
     sys_packages: [ 'sudo', 'vim', 'git', 'ufw'] 
     enabled_repos: 
       - deb http://ftp.us.debian.org/debian buster main contrib non-free
