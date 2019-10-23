@@ -11,7 +11,7 @@
   gather_facts: false
   vars:
     create_user: ansible
-    copy_local_key: files/id_rsa.pub
+    public_key: files/id_rsa.pub
     sys_packages: [ 'sudo', 'vim', 'git', 'ufw'] 
     enabled_repos: 
       - deb http://ftp.us.debian.org/debian buster main contrib non-free
@@ -63,9 +63,11 @@
 
     - name: Set authorized key for remote user
       authorized_key:
-         user: "{{ create_user }}"
-         state: present
-         key: "{{ copy_local_key }}"
+        user: "{{ create_user }}"
+        state: present
+        key: "{{ item }}"
+      with_file: 
+        - "{{ public_key }}"
 
     - name: Disable password authentication for root
       lineinfile:
