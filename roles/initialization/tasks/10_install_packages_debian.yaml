@@ -1,0 +1,26 @@
+###########################################################################################################
+## DO Community Playbooks
+## Playbook: Initial Server Setup
+## Based on: https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04
+## Dedicated Guide: https://www.digitalocean.com/community/tutorials/automating-initial-server-setup-with-ansible
+####################################################################################################################
+#
+---
+- name: Disable cdrom repo
+  replace:
+    path: /etc/apt/sources.list
+    regexp: '(.*cdrom.*)'
+    replace: '#\1'
+
+- name: Enable repos
+  apt_repository:
+    repo: "{{ item }}" 
+    state: present
+  loop: "{{ init_enabled_repos }}"
+
+- name: Update apt
+  apt: update_cache=yes
+
+- name: Install required system packages
+  apt: name={{ init_packages }} state=latest
+
