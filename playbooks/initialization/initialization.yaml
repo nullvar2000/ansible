@@ -1,0 +1,49 @@
+---
+- hosts: all
+  remote_user: root
+  vars_files:
+    - vars/default.yaml
+
+  tasks:
+    - name: gather os specific variables
+      include_vars: vars/{{ ansible_distribution }}.yaml
+
+    - name: run os specific tasks
+      include_tasks: tasks/{{ ansible_distribution }}.yaml
+
+    - name: add 'wheel' group
+      group:
+        name: wheel
+        state: present
+
+    - name: give 'wheel' group passwordless sudo
+      lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: '/usr/sbin/visudo -cf %s'
+
+    - name: create ansible user
+      user:
+        name: "{{ init_create_user }}"
+        state: present
+        groups: wheel
+        append: true
+        create_home: true
+        shell: /bin/bash
+
+    - name: copy ansible user ssh key
+      authorized_key:
+        user: "{{ init_create_user }}"
+        state: present
+        key: "{{ item }}"
+      with_file: 
+        - "{{ init_public_key }}"
+
+    - name: disable password authentication for root ssh
+      lineinfile:
+          path: /etc/ssh/sshd_config
+          state: present
+          regexp: '^#?PermitRootLogin'
+          line: 'PermitRootLogin prohibit-password'

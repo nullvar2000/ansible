@@ -1,0 +1,3 @@
+---
+init_create_user: ansible
+init_public_key: files/id_rsa.pub

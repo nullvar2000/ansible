@@ -1,0 +1,6 @@
+---
+- name: install initial system packages
+  dnf: 
+    name: "{{ init_packages }}" 
+    state: latest
+    
