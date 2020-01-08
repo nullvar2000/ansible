@@ -1,7 +1,0 @@
----
-init_create_user: ansible
-init_public_key: id_rsa.pub
-init_packages: [ 'sudo', 'vim', 'git', 'ufw']
-
-- include: debian.yml
-  when: ansible_os_family == "Debian"
