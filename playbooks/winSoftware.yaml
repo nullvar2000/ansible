@@ -1,0 +1,24 @@
+---
+- hosts: windows
+
+  tasks:
+    - name: install packages
+      chocolatey:
+        name:
+        - 7zip
+        - cpu-z
+        - cura-new
+        - Firefox
+        - git
+        - GoogleChrome
+        - msiafterburner
+        - notepadplusplus
+        - putty
+        - steam
+        - vcredist140
+        - vcredist2010
+        - vcredist2012
+        - vcredist2013
+        - vcredist2015
+        - vmrc
+        - vscode

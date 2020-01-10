@@ -1,0 +1,18 @@
+---
+- hosts: shinobi
+  vars:
+    shinobi_pass: "shinobi-password"
+    db_host: "localhost"
+    shinobi_port: "8080"
+    user_pass: "shinobi-user"
+    user_mail: "root@local.lan"
+    dbhash: "sha256"
+    startup: true
+    ce: true
+    pro: false
+    lts: true
+  roles:
+    - charliemaiors.nodejs
+    - charliemaiors.ffmpeg
+    - charliemaiors.shinobi_db
+    - charliemaiors.shinobi
