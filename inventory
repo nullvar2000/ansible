@@ -1,11 +1,8 @@
 [awx]
 ansible
 
-[testing]
-web
-
 [windows]
 win01
 
 [shinobi]
-shinobi-all-in-one
+shinobi
