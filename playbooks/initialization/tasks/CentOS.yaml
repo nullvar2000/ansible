@@ -1,6 +1,6 @@
 ---
 - name: install initial system packages
-  dnf: 
+  yum: 
     name: "{{ init_packages }}" 
     state: latest
     
