@@ -1,12 +1,19 @@
 ---
 - hosts: shinobi
   vars:
-    shinobi_pass: "shinobi-password"
+    # database variables
+    user_mail: "shinobi@local.lan" # for frontend login
+    user_pass: "shinobi-password" # for frontend login
+    mysql_root: # blank passwords are randomly generated
+
+    # database connections
+    shinobi_user: "shinobi" 
+    shinobi_pass: # blank passwords are randomly generated
+    dbhash: "sha256"
+    
+    # frontend variables
     db_host: "localhost"
     shinobi_port: "8080"
-    user_pass: "shinobi-user"
-    user_mail: "root@local.lan"
-    dbhash: "sha256"
     startup: true
     ce: true
     pro: false
