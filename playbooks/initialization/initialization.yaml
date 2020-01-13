@@ -47,3 +47,9 @@
           state: present
           regexp: '^#?PermitRootLogin'
           line: 'PermitRootLogin prohibit-password'
+
+    - name: restart ssh service
+      service:
+        name: sshd
+        state: restarted
+        
