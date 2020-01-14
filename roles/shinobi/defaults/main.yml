@@ -1,0 +1,9 @@
+---
+shinobi_role_repo_version: "HEAD"
+shinobi_role_install_dir: '/opt/shinobi/'
+shinobi_role_admin_pass: 'admin'
+shinobi_role_port: 8080
+shinobi_role_db_host: localhost
+shinobi_role_db_user: 'shinobi'
+shinobi_role_db_pass: 'password'
+shinobi_role_db_port: 3306

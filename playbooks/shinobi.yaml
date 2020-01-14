@@ -1,25 +1,15 @@
 ---
 - hosts: shinobi
-  vars:
-    # database variables
-    user_mail: "shinobi@local.lan" # for frontend login
-    user_pass: "shinobi-password" # for frontend login
-    mysql_root: # blank passwords are randomly generated
+  become: true
 
-    # database connections
-    shinobi_user: "shinobi" 
-    shinobi_pass: # blank passwords are randomly generated
-    dbhash: "sha256"
-    
-    # frontend variables
-    db_host: "localhost"
-    shinobi_port: "8080"
-    startup: true
-    ce: true
-    pro: false
-    lts: true
+  vars:
+    nodejs_version: "10.x"
+    nodejs_npm_global_packages:
+      - name: ffbinaries
+      - name: mp4frag
+      - name: cws
+      - name: pm2
+
   roles:
-    - charliemaiors.nodejs
-    - charliemaiors.ffmpeg
-    - charliemaiors.shinobi_db
-    - charliemaiors.shinobi
+    - geerlingguy.nodejs
+    - shinobi
