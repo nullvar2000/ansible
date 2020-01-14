@@ -1,6 +1,6 @@
 ---
-- name: install initial system packages
+- name: install initial packages
   yum: 
     name: "{{ init_packages }}" 
+    update_cache: yes
     state: latest
-    

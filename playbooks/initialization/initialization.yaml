@@ -11,6 +11,11 @@
     - name: run os specific tasks
       include_tasks: tasks/{{ ansible_distribution }}.yaml
 
+    - name: update system
+      package:    
+        name: '*'
+        state: latest
+
     - name: add 'wheel' group
       group:
         name: wheel

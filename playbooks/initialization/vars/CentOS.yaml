@@ -1,1 +1,1 @@
-init_packages: [ 'sudo', 'vim', 'git', 'epel-release', 'open-vm-tools']
+init_packages: ['sudo', 'vim', 'git', 'epel-release', 'open-vm-tools', 'net-tools', 'deltarpm']
