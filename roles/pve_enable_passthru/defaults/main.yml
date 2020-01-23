@@ -1,0 +1,11 @@
+---
+# grub
+pve_enable_passthru_enable_grub_custom_options: 'quiet'
+pve_enable_passthru_enable_grub_performance: true
+pve_enable_passthru_disable_framebuffer: true
+pve_enable_passthru_pcie_acs_override_patch: ''
+
+# modules
+pve_enable_passthru_allow_unsafe_interrupts: false
+pve_enable_passthru_ignore_msrs: false
+

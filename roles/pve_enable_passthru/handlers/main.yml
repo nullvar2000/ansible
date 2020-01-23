@@ -1,0 +1,12 @@
+---
+- name: update grub
+  shell: update-grub
+  register: update_grub_result
+  failed_when: update_grub_result.rc != 0
+  changed_when: update_grub_result.rc == 0
+
+- name: reboot pve
+  #reboot:
+  debug:
+    msg: sim reboot
+  

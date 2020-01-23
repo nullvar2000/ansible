@@ -1,0 +1,7 @@
+---
+pve_enable_passthru_module_options_path: /etc/modprobe.d/pve-passthru-options.conf
+pve_enable_passthru_vfio_modules:
+  - vfio
+  - vfio_iommu_type1
+  - vfio_pci
+  - vfio_virqfd

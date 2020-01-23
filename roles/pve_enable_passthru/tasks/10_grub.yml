@@ -1,0 +1,47 @@
+---
+
+- name: enable iommu for amd
+  set_fact:
+    pve_enable_passthru_grub_options: '{{ pve_enable_passthru_enable_grub_custom_options }} amd_iommu=on'
+  when: ansible_processor[1] is search('AMD')
+
+- name: enable iommu for intel
+  set_fact:
+    pve_enable_passthru_grub_options: '{{ pve_enable_passthru_enable_grub_custom_options }} intel_iommu=on'
+  when: ansible_processor[1] is search('Intel')
+
+- name: check for iommu type
+  fail:
+    msg: 'Unable to determine IOMMU type'
+  when:  pve_enable_passthru_grub_options|length == 0
+
+# https://community.mellanox.com/s/article/understanding-the-iommu-linux-grub-file-configuration
+- name: enable improved performance
+  set_fact:
+    pve_enable_passthru_grub_options: '{{ pve_enable_passthru_grub_options }} iommu=pt'
+  when: pve_enable_passthru_enable_grub_performance
+
+# https://passthroughpo.st/explaining-csm-efifboff-setting-boot-gpu-manually/
+- name: disable vesa framebuffer
+  set_fact:
+    pve_enable_passthru_grub_options: '{{ pve_enable_passthru_grub_options }} video=vesafb:off,efifb:off'
+  when: pve_enable_passthru_disable_framebuffer
+
+# http://vfio.blogspot.com/2014/08/vfiovga-faq.html
+- name: set pcie_acs_override patch
+  set_fact:
+    pve_enable_passthru_grub_options: '{{ pve_enable_passthru_grub_options }} pcie_acs_override={{ pve_enable_passthru_pcie_acs_override_patch }}'
+  when: pve_enable_passthru_pcie_acs_override_patch|length > 0
+
+- debug: 
+        msg: 'options: {{ pve_enable_passthru_grub_options }}'
+
+- name: add options to grub config
+  lineinfile:
+    path: '/etc/default/grub'
+    backrefs: true
+    regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT=").+$'
+    line: '\1{{ pve_enable_passthru_grub_options }}"'
+  notify:
+    - update grub
+    - reboot pve
