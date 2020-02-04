@@ -1,0 +1,36 @@
+---
+
+- name: get kernel module for {{ item }}
+  shell: "lspci -s {{ item }} -k | grep 'Kernel modules:' | cut -d':' -f2"
+  register: device_module_result
+  changed_when: false
+
+- name: blacklist module {{ item }}
+  lineinfile:
+    path: '{{ pve_passthru_devices_module_blacklist_path }}'
+    line: 'blacklist {{ module_name }}'
+    create: true
+    state: present
+  loop: '{{ device_module_result.stdout.split(",") | replace(" ", "")}}'
+  loop_control:
+    loop_var: module_name
+  when: device_module_result.stdout | length > 0
+  notify: 
+    - update initramfs
+    - reboot pve
+
+- name: get device id for {{ item }}
+  shell: "lspci -s {{ item }} -n | cut -d' ' -f3"
+  register: device_id_result
+  changed_when: false
+
+- name: create vfio-pci string with module {{ item }}
+  set_fact:
+    pve_passthru_devices_vfio_pci_string: '{{ device_id_result.stdout }}'
+  when: pve_passthru_devices_vfio_pci_string is not defined
+
+- name: append module {{ item }} to vfio-pci string
+  set_fact:
+    pve_passthru_devices_vfio_pci_string: '{{ pve_passthru_devices_vfio_pci_string }},{{ device_id_result.stdout }}'
+  when: pve_passthru_devices_vfio_pci_string | length > 0
+    

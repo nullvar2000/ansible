@@ -1,0 +1,31 @@
+---
+
+- name: read existing vfio-pci modules
+  shell: grep 'options vfio-pci ids=' {{ pve_passthru_devices_module_vfio_path }} | cut -d'=' -f2
+  register: grep_vfio_result
+  changed_when: false
+
+- name: add new modules to existing vfio-pci
+  copy:
+    content: 'options vfio-pci ids={{ grep_vfio_result.stdout }},{{ pve_passthru_devices_vfio_pci_string }}'
+    dest: '{{ pve_passthru_devices_module_vfio_path }}'
+    owner: root
+    group: root
+    mode: '0644'
+  when: grep_vfio_result.stdout | length > 0
+  notify: 
+    - update initramfs
+    - reboot pve
+
+- name: add new modules to new vfio-pci
+  copy:
+    content: 'options vfio-pci ids={{ pve_passthru_devices_vfio_pci_string }}'
+    dest: '{{ pve_passthru_devices_module_vfio_path }}'
+    owner: root
+    group: root
+    mode: '0644'
+  when: grep_vfio_result.stdout | length == 0
+  notify: 
+    - update initramfs
+    - reboot pve
+  

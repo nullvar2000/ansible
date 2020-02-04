@@ -1,0 +1,4 @@
+---
+
+pve_passthru_devices_module_blacklist_path: /etc/modprobe.d/pve-passthru-blacklist.conf
+pve_passthru_devices_module_vfio_path: /etc/modprobe.d/pve-passthru-vfio.conf

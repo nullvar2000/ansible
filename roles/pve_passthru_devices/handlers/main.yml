@@ -1,0 +1,8 @@
+---
+
+- name: update initramfs
+  shell: 'update-initramfs -u -k all'
+  
+- name: reboot pve
+  reboot:
+  

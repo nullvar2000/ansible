@@ -1,0 +1,19 @@
+---
+
+- name: gather available pci devices
+  shell: lspci
+  register: lspci_result
+  failed_when: lspci_result.rc != 0
+  changed_when: false
+
+- name: display available pci devices
+  debug:
+    msg: '{{ lspci_result.stdout_lines }}'
+
+- name: toggle device passthroughs
+  include_tasks: blacklist_module.yml
+  when: (pve_passthru_devices_device_id is defined) and (pve_passthru_devices_device_id|length > 0)
+  loop: '{{ pve_passthru_devices_device_id|default([]) }}'
+      
+- name: create vfio-pci options file
+  include_tasks: vfio_pci.yml
