@@ -5,7 +5,9 @@
 - src: geerlingguy.pip
 - src: geerlingguy.nodejs
 - src: geerlingguy.awx
-- src: charliemaiors.shinobi_db
-- src: charliemaiors.shinobi
-- src: charliemaiors.ffmpeg
-- src: charliemaiors.nodejs
+- src: geerlingguy.mysql
+- src: zfuller.pihole
+#- src: charliemaiors.shinobi_db
+#- src: charliemaiors.shinobi
+#- src: charliemaiors.ffmpeg
+#- src: charliemaiors.nodejs
