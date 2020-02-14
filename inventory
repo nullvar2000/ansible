@@ -5,4 +5,16 @@ ansible
 win01
 
 [shinobi]
-shinobi
+shinboi
+
+[database]
+db
+
+[proxmox]
+pve
+
+[mopidy]
+javik
+
+[pihole]
+pihole
