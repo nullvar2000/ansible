@@ -3,22 +3,35 @@
 
   tasks:
     - name: install packages
-      chocolatey:
+      win_chocolatey:
         name:
-        - 7zip
-        - cpu-z
-        - cura-new
-        - Firefox
-        - git
-        - GoogleChrome
-        - msiafterburner
-        - notepadplusplus
-        - putty
-        - steam
-        - vcredist140
-        - vcredist2010
-        - vcredist2012
-        - vcredist2013
-        - vcredist2015
-        - vmrc
-        - vscode
+          - 7zip
+          - cinebench
+          - cpu-z
+          - cura-new
+          - Firefox
+          - git
+          - GoogleChrome
+          - gpu-z
+          - msiafterburner
+          - mysql.workbench
+          - notepadplusplus
+          - opera
+          - putty
+          - steam
+          - vcredist140
+          - vcredist2010
+          - vcredist2012
+          - vcredist2013
+          - vcredist2015
+          - vmrc
+          - vscode
+
+    - name: install nvidia stuff
+      win_chocolatey:
+        name: 
+          - nvidia-display-driver
+          - nvidia-geforce-experience
+        tags:
+          - nvidia
+
