@@ -2,6 +2,9 @@
 - hosts: windows
 
   tasks:
+    - debug:
+      msg: "doing something"
+
     - name: install packages
       win_chocolatey:
         name:
@@ -26,6 +29,8 @@
           - vcredist2015
           - vmrc
           - vscode
+        tags: 
+          - software
 
     - name: install nvidia stuff
       win_chocolatey:
