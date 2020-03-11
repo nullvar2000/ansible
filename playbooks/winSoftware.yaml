@@ -2,14 +2,11 @@
 - hosts: windows
 
   tasks:
-    - debug:
-        msg: "doing something"
 
     - name: install packages
       win_chocolatey:
         name:
           - 7zip
-          - cinebench
           - cpu-z
           - cura-new
           - Firefox
@@ -21,7 +18,6 @@
           - notepadplusplus
           - opera
           - putty
-          - steam
           - vcredist140
           - vcredist2010
           - vcredist2012
@@ -31,6 +27,25 @@
           - vscode
       tags: 
         - software
+
+    - name: install gaming stuff
+      win_chocolatey:
+        name:
+          - steam
+          - origin
+          - uplay
+      tags:
+        - gaming
+
+    - name: install benchmarks
+      win_chocolatey:
+        name:
+          - cinebench
+          - heaven-benchmark
+          - superposition-benchmark
+          - valley-benchmark
+      tags:
+        - benchmarks
 
     - name: install nvidia stuff
       win_chocolatey:
