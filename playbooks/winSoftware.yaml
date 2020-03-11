@@ -29,14 +29,14 @@
           - vcredist2015
           - vmrc
           - vscode
-        tags: 
-          - software
+      tags: 
+        - software
 
     - name: install nvidia stuff
       win_chocolatey:
         name: 
           - nvidia-display-driver
           - nvidia-geforce-experience
-        tags:
-          - nvidia
+      tags:
+        - nvidia
 
