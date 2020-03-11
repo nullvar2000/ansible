@@ -3,7 +3,7 @@
 
   tasks:
     - debug:
-      msg: "doing something"
+        msg: "doing something"
 
     - name: install packages
       win_chocolatey:
