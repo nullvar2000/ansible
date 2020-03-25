@@ -1,0 +1,47 @@
+---
+
+- name: ensure latest sudo is installed
+  package:    
+    name: 'sudo'
+    state: latest
+
+- name: add wheel group
+  group:
+    name: wheel
+    state: present
+
+- name: give wheel group passwordless sudo
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: '/usr/sbin/visudo -cf %s'
+
+- name: create ansible user
+  user:
+    name: "{{ init_ansible_user }}"
+    state: present
+    groups: wheel
+    append: true
+    create_home: true
+    shell: /bin/bash
+
+- name: copy ansible user ssh key
+  authorized_key:
+    user: "{{ init_ansible_user }}"
+    state: present
+    key: "{{ init_ansible_public_key }}"
+
+- name: disable password authentication for root ssh
+  lineinfile:
+      path: /etc/ssh/sshd_config
+      state: present
+      regexp: '^#?PermitRootLogin'
+      line: 'PermitRootLogin prohibit-password'
+
+- name: restart ssh service
+  service:
+    name: sshd
+    state: restarted
+    
