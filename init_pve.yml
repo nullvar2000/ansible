@@ -22,6 +22,5 @@
         state: present
 
   roles:
-    - init_ansible
     - geerlingguy.pip
-    
+    - init_ansible
