@@ -4,17 +4,16 @@
 
   vars:
     pve_no_subscription_repo: "deb http://download.proxmox.com/debian/pve buster pve-no-subscription"
-    pve_subscription_repo: "deb https://enterprise.proxmox.com/debian/pve buster pve-enterprise"
+    pve_subscription_repo_file: "/etc/apt/sources.list.d/pve-enterprise.list"
     pip_install_packages:
       - name: proxmoxer
       - name: request
 
   pre_tasks:
     - name: remove subscription based repo
-      apt_repository:
-        repo: "{{ pve_subscription_repo }}"
+      file:
+        path: "{{ pve_subscription_repo_file }}"
         state: absent
-        filename: pve-enterprise
 
     - name: add non-subscription based repo
       apt_repository:
