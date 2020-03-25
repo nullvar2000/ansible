@@ -11,16 +11,17 @@
 
   tasks:
     - name: remove subscription based repo
-      apt-repository:
+      apt_repository:
         repo: "{{ pve_subscription_repo }}"
         state: absent
         filename: pve-enterprise
 
     - name: add non-subscription based repo
-      apt-repository:
+      apt_repository:
         repo: "{{ pve_no_subscription_repo }}"
         state: present
 
   roles:
     - geerlingguy.pip
+    - ironicbadger.ansible_role_proxmox_nag_removal
     - init_ansible

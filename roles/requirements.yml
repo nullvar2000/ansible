@@ -7,6 +7,7 @@
 - src: geerlingguy.awx
 - src: geerlingguy.mysql
 - src: zfuller.pihole
+- src: ironicbadger.ansible_role_proxmox_nag_removal
 #- src: charliemaiors.shinobi_db
 #- src: charliemaiors.shinobi
 #- src: charliemaiors.ffmpeg
