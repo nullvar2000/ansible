@@ -1,5 +1,5 @@
 ---
-- hosts: pve
+- hosts: proxmox
   gather_facts: true
 
   vars:
@@ -9,7 +9,7 @@
       - name: proxmoxer
       - name: request
 
-  tasks:
+  pre_tasks:
     - name: remove subscription based repo
       apt_repository:
         repo: "{{ pve_subscription_repo }}"
