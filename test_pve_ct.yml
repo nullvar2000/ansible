@@ -1,0 +1,13 @@
+---
+- hosts: proxmox
+  user: root
+
+  vars:
+    pve_ct_api_passwd: 24wr%&TU
+    pve_ct_ostemplate: "iso:vztmpl/centos-8-default_20190926_amd64.tar.xz"
+    pve_ct_hostname: "jimmy"
+    pve_ct_root_passwd: "milk56"
+
+  roles:
+    - pve_ct
+    
