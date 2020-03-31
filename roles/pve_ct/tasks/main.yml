@@ -1,10 +1,18 @@
 ---
-- proxmox:
+
+- name: deploy on proxmox
+  proxmox:
     node: "{{ pve_ct_node }}"
     api_host: "{{ pve_ct_api_host }}"
     api_user: "{{ pve_ct_api_user }}"
     api_password: "{{ pve_ct_api_passwd }}"
     hostname: "{{ pve_ct_hostname }}"
     ostemplate: "{{ pve_ct_ostemplate }}"
+    storage: "{{ pve_ct_storage | default(omit)}}"
     pubkey: "{{ pve_ct_public_key | default(omit) }}"
     password: "{{ pve_ct_root_passwd }}"
+  register: pve_ct_out
+
+- debug:
+    msg: "{{ pve_ct_out }}"
+    

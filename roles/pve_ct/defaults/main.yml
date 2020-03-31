@@ -6,6 +6,7 @@ pve_ct_api_passwd: "%"
 pve_ct_node: "{{ pve_ct_api_host }}"
 pve_ct_hostname:
 pve_ct_ostemplate:
+pve_ct_storage:
 pve_ct_public_key:
 pve_ct_passwd:
 
@@ -19,4 +20,5 @@ pve_ct_defaults:
   onboot: no
   storage: "local"
   unprivileged: no
+
   
