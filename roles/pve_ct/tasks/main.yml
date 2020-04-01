@@ -11,8 +11,21 @@
     storage: "{{ pve_ct_storage | default(omit)}}"
     pubkey: "{{ pve_ct_public_key | default(omit) }}"
     password: "{{ pve_ct_root_passwd }}"
+    state: present
   register: pve_ct_out
 
-- debug:
-    msg: "{{ pve_ct_out }}"
-    
+- name: get vmid
+  set_fact:
+    vmid: "{{ pve_ct_out.msg | regex_replace('deployed VM (\\d+)?.*', '\\1') }}"
+
+- pause:
+    seconds: 10
+
+- name: start vm {{ vmid }}
+  proxmox:
+    vmid: "{{ vmid }}"
+    api_host: "{{ pve_ct_api_host }}"
+    api_user: "{{ pve_ct_api_user }}"
+    api_password: "{{ pve_ct_api_passwd }}"
+    state: started 
+

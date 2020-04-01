@@ -3,7 +3,7 @@
   user: root
 
   vars:
-    pve_ct_api_passwd: '%'
+    pve_ct_api_passwd: 'GyI_!4!v%2'
     pve_ct_ostemplate: "iso:vztmpl/centos-7-default_20190926_amd64.tar.xz"
     pve_ct_storage: "vmstore"
     pve_ct_hostname: "jimmy"
