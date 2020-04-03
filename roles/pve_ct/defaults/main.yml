@@ -4,21 +4,18 @@ pve_ct_api_host: "pve"
 pve_ct_api_user: "root@pam"
 pve_ct_api_passwd: "%"
 pve_ct_node: "{{ pve_ct_api_host }}"
-pve_ct_hostname:
-pve_ct_ostemplate:
-pve_ct_storage:
-pve_ct_public_key:
-pve_ct_passwd:
+# pve_ct_vmid: 
+# pve_ct_hostname:
+# pve_ct_ostemplate:
+pve_ct_storage: "local"
+pve_ct_cores: 1
+pve_ct_cpus: 1
+pve_ct_disk: 4
+pve_ct_memory: 512
+pve_ct_force: false
+pve_ct_onboot: false
+pve_ct_unprivileged: false
+# pve_ct_public_key:
+# pve_ct_passwd:
+pve_ct_startup_on_deploy: true
 
-# defaults
-pve_ct_defaults:
-  cores: 1
-  cpus: 1
-  disk: 4
-  force: no
-  memory: 512
-  onboot: no
-  storage: "local"
-  unprivileged: no
-
-  

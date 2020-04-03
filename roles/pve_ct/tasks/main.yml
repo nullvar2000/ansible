@@ -1,31 +1,44 @@
 ---
 
-- name: deploy on proxmox
+- name: deploy container on proxmox
   proxmox:
     node: "{{ pve_ct_node }}"
     api_host: "{{ pve_ct_api_host }}"
     api_user: "{{ pve_ct_api_user }}"
     api_password: "{{ pve_ct_api_passwd }}"
+    vmid: "{{ pve_ct_vmid | default(omit) }}"
     hostname: "{{ pve_ct_hostname }}"
     ostemplate: "{{ pve_ct_ostemplate }}"
-    storage: "{{ pve_ct_storage | default(omit)}}"
+    storage: "{{ pve_ct_storage }}"
+    cores: "{{ pve_ct_cores }}"
+    cpus: "{{ pve_ct_cpus }}"
+    disk: "{{ pve_ct_disk }}"
+    force: "{{ pve_ct_force }}"
+    memory: "{{ pve_ct_memory }}"
+    onboot: "{{ pve_ct_onboot }}"
+    unprivileged: "{{ pve_ct_unprivileged }}"
     pubkey: "{{ pve_ct_public_key | default(omit) }}"
     password: "{{ pve_ct_root_passwd }}"
     state: present
   register: pve_ct_out
 
-- name: get vmid
-  set_fact:
-    vmid: "{{ pve_ct_out.msg | regex_replace('deployed VM (\\d+)?.*', '\\1') }}"
-
 - pause:
     seconds: 10
 
-- name: start vm {{ vmid }}
-  proxmox:
-    vmid: "{{ vmid }}"
-    api_host: "{{ pve_ct_api_host }}"
-    api_user: "{{ pve_ct_api_user }}"
-    api_password: "{{ pve_ct_api_passwd }}"
-    state: started 
+- name: startup on deploy
+  block: 
+
+  - name: get vmid
+    set_fact:
+      vmid: "{{ pve_ct_out.msg | regex_replace('deployed VM (\\d+)?.*', '\\1') }}"
+
+  - name: start vm {{ vmid }}
+    proxmox:
+      vmid: "{{ vmid }}"
+      api_host: "{{ pve_ct_api_host }}"
+      api_user: "{{ pve_ct_api_user }}"
+      api_password: "{{ pve_ct_api_passwd }}"
+      state: started 
+  
+  when: pve_ct_startup_on_deploy
 
