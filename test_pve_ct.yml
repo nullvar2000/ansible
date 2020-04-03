@@ -1,6 +1,5 @@
 ---
 - hosts: proxmox
-  user: root
 
   vars:
     pve_ct_api_passwd: '%'
