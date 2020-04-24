@@ -1,0 +1,41 @@
+---
+
+# inputs
+pve_deploy_api_host: "pve"
+pve_deploy_api_user: "root@pam"
+pve_deploy_api_passwd: "%"
+pve_deploy_node: "{{ pve_deploy_api_host }}"
+# pve_deploy_vmid: 
+# pve_deploy_name:
+# pve_deploy_pool:
+
+pve_deploy_container: true
+
+pve_deploy_cores: 1
+pve_deploy_memory: 512
+pve_deploy_force: false
+pve_deploy_onboot: false
+pve_deploy_storage: "local"
+pve_deploy_startup_on_deploy: true
+
+
+# ct specific inputs
+pve_deploy_ct_disk: 4
+pve_deploy_ct_netif: '{"net0":"name=eth0,ip=dhcp,ip6=dhcp,bridge=vmbr0"}'
+pve_deploy_ct_unprivileged: false
+# pve_deploy_ct_ostemplate:
+# pve_deploy_ct_passwd:
+# pve_deploy_ct_public_key:
+
+# vm specific inputs
+pve_deploy_vm_agent: true
+pve_deploy_vm_bios: "seabios"
+pve_deploy_vm_format: "qcow2"
+pve_deploy_vm_full: true
+pve_deploy_vm_timeout: 3600
+pve_deploy_vm_localtime: true
+pve_deploy_vm_machine: "i440fx"
+pve_deploy_vm_net: '{"net0":"virtio,bridge=vmbr0"}'
+pve_depoly_vm_ostype: "l26"
+#pve_deploy_vm_clone: 
+

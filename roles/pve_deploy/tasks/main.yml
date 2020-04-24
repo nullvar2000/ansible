@@ -1,0 +1,8 @@
+---
+
+- include: deploy_ct.yml
+  when: pve_deploy_container
+
+- include: deploy_vm.yml
+  when: not pve_deploy_container
+

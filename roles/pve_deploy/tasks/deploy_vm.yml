@@ -1,0 +1,43 @@
+---
+
+- name: deploy virtual machine on proxmox
+  proxmox_kvm:
+    node: "{{ pve_deploy_node }}"
+    api_host: "{{ pve_deploy_api_host }}"
+    api_user: "{{ pve_deploy_api_user }}"
+    api_password: "{{ pve_deploy_api_passwd }}"
+    vmid: "{{ pve_deploy_vmid | default(omit) }}"
+    name: "{{ pve_deploy_name }}"
+    clone: "{{ pve_deploy_vm_clone }}"
+    format: "{{ pve_deploy_vm_format }}"
+    timeout: "{{ pve_deploy_vm_timeout }}"
+    storage: "{{ pve_deploy_storage }}"
+    cores: "{{ pve_deploy_cores }}"
+    force: "{{ pve_deploy_force }}"
+    memory: "{{ pve_deploy_memory }}"
+    onboot: "{{ pve_deploy_onboot }}"
+    state: present
+  register: pve_deploy_out
+
+- debug:
+    msg: "{{ pve_deploy_out }}"
+    
+- pause:
+    seconds: 10
+
+- name: get vmid
+  set_fact:
+    vmid: "{{ pve_deploy_out.msg | regex_replace('.*newid (\\d+)? cloned.*', '\\1') }}"
+
+- debug:
+    msg: "{{ vmid }}"
+
+- name: start vm {{ vmid }}
+  proxmox_kvm:
+    vmid: "{{ vmid }}"
+    api_host: "{{ pve_deploy_api_host }}"
+    api_user: "{{ pve_deploy_api_user }}"
+    api_password: "{{ pve_deploy_api_passwd }}"
+    state: started 
+  when: pve_deploy_startup_on_deploy
+

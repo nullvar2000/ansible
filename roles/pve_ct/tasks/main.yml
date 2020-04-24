@@ -9,6 +9,7 @@
     vmid: "{{ pve_ct_vmid | default(omit) }}"
     hostname: "{{ pve_ct_hostname }}"
     ostemplate: "{{ pve_ct_ostemplate }}"
+    netif: '{"net0":"name=eth0,ip=dhcp,ip6=dhcp,bridge=vmbr0"}'
     storage: "{{ pve_ct_storage }}"
     cores: "{{ pve_ct_cores }}"
     cpus: "{{ pve_ct_cpus }}"

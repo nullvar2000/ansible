@@ -1,0 +1,42 @@
+---
+
+- name: deploy container on proxmox
+  proxmox:
+    node: "{{ pve_deploy_node }}"
+    api_host: "{{ pve_deploy_api_host }}"
+    api_user: "{{ pve_deploy_api_user }}"
+    api_password: "{{ pve_deploy_api_passwd }}"
+    vmid: "{{ pve_deploy_vmid | default(omit) }}"
+    hostname: "{{ pve_deploy_name }}"
+    ostemplate: "{{ pve_deploy_ct_ostemplate }}"
+    netif: "{{ pve_deploy_ct_netif }}"
+    storage: "{{ pve_deploy_storage }}"
+    cores: "{{ pve_deploy_cores }}"
+    #cpus: "{{ pve_deploy_cpus }}"
+    disk: "{{ pve_deploy_ct_disk }}"
+    force: "{{ pve_deploy_force }}"
+    memory: "{{ pve_deploy_memory }}"
+    onboot: "{{ pve_deploy_onboot }}"
+    unprivileged: "{{ pve_deploy_ct_unprivileged }}"
+    pubkey: "{{ pve_deploy_ct_public_key | default(omit) }}"
+    password: "{{ pve_deploy_ct_root_passwd }}"
+    state: present
+  register: pve_deploy_out
+  
+- pause:
+    seconds: 10
+
+- name: get vmid
+  set_fact:
+    vmid: "{{ pve_deploy_out.msg | regex_replace('deployed VM (\\d+)?.*', '\\1') }}"
+
+- name: start ct {{ vmid }}
+  proxmox:
+    vmid: "{{ vmid }}"
+    api_host: "{{ pve_deploy_api_host }}"
+    api_user: "{{ pve_deploy_api_user }}"
+    api_password: "{{ pve_deploy_api_passwd }}"
+    state: started 
+  when: pve_deploy_startup_on_deploy
+
+
