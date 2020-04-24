@@ -1,5 +1,0 @@
----
-shinobi_role_required_packages:
-  - git
-shinobi_role_git_repo: 'https://gitlab.com/Shinobi-Systems/Shinobi.git'
-shinobi_role_random_key: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
