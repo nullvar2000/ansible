@@ -21,7 +21,7 @@ pve_deploy_startup_on_deploy: true
 
 # ct specific inputs
 pve_deploy_ct_disk: 4
-pve_deploy_ct_netif: '{"net0":"name=eth0,ip=dhcp,ip6=dhcp,bridge=vmbr0"}'
+pve_deploy_ct_netif: '{"net0":"name=eth0,ip=dhcp,bridge=vmbr0"}'
 pve_deploy_ct_unprivileged: false
 # pve_deploy_ct_ostemplate:
 # pve_deploy_ct_passwd:

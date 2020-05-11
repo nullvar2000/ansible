@@ -1,0 +1,4 @@
+---
+
+plex_server_baseurl: "https://downloads.plex.tv/repo/rpm/$basearch/"
+plex_server_gpgcakey: "https://downloads.plex.tv/plex-keys/PlexSign.key"

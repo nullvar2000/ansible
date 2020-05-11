@@ -1,0 +1,4 @@
+---
+
+plex_server_enabled: true
+plex_server_state: "started"

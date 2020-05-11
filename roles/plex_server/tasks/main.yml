@@ -1,0 +1,22 @@
+---
+
+- name: add plex repo
+  yum_repository:
+    name: plex
+    description: PlexRepo
+    baseurl: "{{ plex_server_baseurl }}"
+    gpgcakey: "{{ plex_server_gpgcakey }}"
+    gpgcheck: true
+    enabled: true
+    state: present
+
+- name: install plex media server
+  yum:
+    name: plexmediaserver
+    state: latest
+
+- name: enable and start plex media server
+  systemd:
+    name: plexmediaserver
+    enabled: "{{ plex_server_enabled }}"
+    state: "{{ plex_server_state }}"
