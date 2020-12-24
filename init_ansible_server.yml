@@ -1,0 +1,100 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    ias_hostname: ansible
+    ias_packages:
+      - sudo
+      - git
+      - unzip
+      - openssh-server
+    ias_ansible_user: ansible
+    ias_github_user: nullvar2000
+    ias_github_project: ansible
+
+  tasks:
+  
+    - name: set hostname
+      hostname:
+        name: "{{ ias_hostname }}"
+
+    - name: install packages
+      package:
+        name: "{{ ias_packages }}"
+        state: latest
+
+    - name: enable passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+
+    - name: enable sshd
+      service:
+        name: sshd
+        state: started
+        enabled: true
+
+    - name: add ansible user
+      user:
+        name: "{{ ias_ansible_user }}"
+        generate_ssh_key: true
+        ssh_key_type: ecdsa
+        ssh_key_bits: 521
+        ssh_key_file: .ssh/id_ecdsa
+        groups: wheel
+      register: ias_user
+
+    - name: add public keys
+      authorized_key:
+        user: "{{ ias_ansible_user }}"
+        state: present
+        key: https://github.com/{{ ias_github_user }}.keys
+
+    - name: clone ansible playbooks from github
+      git:
+        repo: https://github.com/{{ ias_github_user }}/{{ ias_github_project }}.git
+        dest: /home/{{ ias_ansible_user }}/{{ ias_github_project }}/
+        update: false
+      become: true
+      become_user: "{{ ias_ansible_user }}"
+
+    - name: set git remote url
+      git_config:
+        name: remote.origin.url
+        repo: /home/{{ ias_ansible_user }}/{{ ias_github_project }}/
+        scope: local
+        value: git@github.com:{{ ias_github_user }}/{{ ias_github_project }}.git
+      become: true
+      become_user: "{{ ias_ansible_user }}"
+    
+    - name: set git user config
+      git_config:
+        name: user.{{ item }}
+        scope: global
+        value: "{{ ias_ansible_user }}@localhost.lan"
+      loop:
+        - email
+        - name
+
+    - name: configure ssh keys for github
+      copy:
+        dest: /home/{{ ias_ansible_user }}/.ssh/config
+        content: |
+          Host github.com
+          IdentityFile /home/{{ ias_ansible_user }}/.ssh/id_ecdsa
+          IdentitiesOnly yes
+        owner: "{{ ias_ansible_user }}"
+        group: "{{ ias_ansible_user }}"
+
+    - name: ssh key reminder
+      debug:
+        msg: 
+          - "Be sure to add public key to githhub"
+          - "{{ ias_user.ssh_public_key }}"
+      
+    
