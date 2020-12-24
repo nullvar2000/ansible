@@ -4,36 +4,36 @@
 
 - name: ensure latest sudo is installed
   package:    
-    name: 'sudo'
+    name: "{{ init_ansible_mgmt_sudo_package_name }}"
     state: latest
 
-- name: add wheel group
+- name: ensure admin group exists
   group:
-    name: wheel
+    name: "{{ init_ansible_mgmt_sudo_group_name }}"
     state: present
 
-- name: give wheel group passwordless sudo
+- name: give admin group passwordless sudo
   lineinfile:
     path: /etc/sudoers
     state: present
-    regexp: '^%wheel'
-    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    regexp: "^%{{ init_ansible_mgmt_sudo_group_name }}"
+    line: '%{{ init_ansible_mgmt_sudo_group_name }} ALL=(ALL) NOPASSWD: ALL'
     validate: '/usr/sbin/visudo -cf %s'
 
 - name: create ansible user
   user:
-    name: "{{ init_ansible_user }}"
+    name: "{{ init_ansible_mgmt_user }}"
     state: present
-    groups: wheel
+    groups: "{{ init_ansible_mgmt_sudo_group_name }}"
     append: true
     create_home: true
     shell: /bin/bash
 
 - name: copy ansible user ssh key
   authorized_key:
-    user: "{{ init_ansible_user }}"
+    user: "{{ init_ansible_mgmt_user }}"
     state: present
-    key: "{{ init_ansible_public_key }}"
+    key: "{{ init_ansible_mgmt_public_key }}"
 
 - name: disable password authentication for root ssh
   lineinfile:

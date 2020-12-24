@@ -1,0 +1,8 @@
+---
+- hosts: shadowbroker
+  remote_user: root
+  gather_facts: true
+
+  roles:
+    - init_ansible_mgmt
+    

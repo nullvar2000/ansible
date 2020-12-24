@@ -1,7 +1,0 @@
----
-- hosts: new_machines
-  gather_facts: true
-
-  roles:
-    - init_ansible
-    

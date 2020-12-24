@@ -1,5 +1,4 @@
 ---
 
-init_ansible_user: ansible
-init_ansible_sudo_package_name: sudo
-init_ansible_public_key: "{{ lookup('file', 'files/id_ecdsa.pub') }}"
+init_ansible_mgmt_user: ansible
+init_ansible_mgmt_public_key: "{{ lookup('file', '~/.ssh/id_ecdsa.pub') }}"

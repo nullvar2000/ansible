@@ -1,0 +1,4 @@
+---
+
+init_ansible_mgmt_sudo_package_name: sudo
+init_ansible_mgmt_sudo_group_name: wheel
