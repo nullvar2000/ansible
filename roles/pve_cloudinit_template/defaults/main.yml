@@ -8,5 +8,4 @@ pct_network: "virtio,bridge=vmbr0"
 pct_disk_store: "local-lvm"
 pct_scsihw: "virtio-scsi-pci"
 pct_ansible_user: ansible
-pct_ansible_ssh_key: id_ecdsa.pub
 pct_ipconfig: "ip=dhcp"

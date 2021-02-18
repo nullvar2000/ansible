@@ -1,45 +1,55 @@
 ---
-- name: pve_cloudinit_template | download img file
-  get_url:
-    url: "{{ pct_template_url }}"
-    dest: "{{ pct_temp_dir }}"
-    mode: 0644
-  register: pct_img_file
+- name: pve_cloudinit_template | check for existing vm {{ pct_vmid }}
+  command: qm status {{ pct_vmid }}
+  ignore_errors: true
+  register: pct_vm_exists
+  changed_when: false
 
-- name: pve_cloudinit_template | create new vm
-  command: qm create {{ pct_vmid }} --memory {{ pct_template_memory }} --net0 {{ pct_network }} --name {{ pct_template_name }}
+- name: pve_cloudinit_template | vm {{ pct_vmid }} does not exist, proceeding
+  block:
 
-- name: pve_cloudinit_template | import disk to new vm
-  command: qm importdisk {{ pct_vmid }} {{ pct_img_file.dest }} {{ pct_disk_store }}
-  register: pct_import_disk
+    - name: pve_cloudinit_template | download img file
+      get_url:
+        url: "{{ pct_template_url }}"
+        dest: "{{ pct_temp_dir }}"
+        mode: 0644
+      register: pct_img_file
 
-- name: pve_cloudinit_template | attach disk to new vm
-  command: qm set {{ pct_vmid }} --scsihw {{ pct_scsihw }} --scsi0 {{ pct_disk_store }}:vm-{{ pct_vmid }}-disk-0
+    - name: pve_cloudinit_template | create new vm
+      command: qm create {{ pct_vmid }} --memory {{ pct_template_memory }} --net0 {{ pct_network }} --name {{ pct_template_name }}
 
-- name: pve_cloudinit_template | cleanup img file
-  file:
-    path: "{{ pct_img_file.dest }}"
-    state: absent
+    - name: pve_cloudinit_template | import disk to new vm
+      command: qm importdisk {{ pct_vmid }} {{ pct_img_file.dest }} {{ pct_disk_store }}
+      register: pct_import_disk
 
-- name: pve_cloudinit_template | attach cloud-init cdrom
-  command: qm set {{ pct_vmid }} --ide2 {{ pct_disk_store }}:cloudinit
+    - name: pve_cloudinit_template | attach disk to new vm
+      command: qm set {{ pct_vmid }} --scsihw {{ pct_scsihw }} --scsi0 {{ pct_disk_store }}:vm-{{ pct_vmid }}-disk-0
 
-- name: pve_cloudinit_template | boot directly to disk image
-  command: qm set {{ pct_vmid }} --boot c --bootdisk scsi0
+    - name: pve_cloudinit_template | cleanup img file
+      file:
+        path: "{{ pct_img_file.dest }}"
+        state: absent
 
-- name: pve_cloudinit_template | attach serial console
-  command: qm set {{ pct_vmid }} --serial0 socket --vga serial0
+    - name: pve_cloudinit_template | attach cloud-init cdrom
+      command: qm set {{ pct_vmid }} --ide2 {{ pct_disk_store }}:cloudinit
 
-- name: pve_cloudinit_template | convert vm to template
-  command: qm template {{ pct_vmid }} 
+    - name: pve_cloudinit_template | boot directly to disk image
+      command: qm set {{ pct_vmid }} --boot c --bootdisk scsi0
 
-- name: pve_cloudinit_template | add ansible user
-  command: qm set {{ pct_vmid }} --ciuser {{ pct_ansible_user }}
+    - name: pve_cloudinit_template | attach serial console
+      command: qm set {{ pct_vmid }} --serial0 socket --vga serial0
 
-- name: pve_cloudinit_template | add ansible user ssh key
-  command: qm set {{ pct_vmid }} --sshkeys /home/{{ pct_ansible_user }}/.ssh/authorized_keys
+    - name: pve_cloudinit_template | convert vm to template
+      command: qm template {{ pct_vmid }} 
 
-- name: pve_cloudinit_template | setup ip config
-  command: qm set {{ pct_vmid }} --ipconfig0 {{ pct_ipconfig }}
+    - name: pve_cloudinit_template | add ansible user
+      command: qm set {{ pct_vmid }} --ciuser {{ pct_ansible_user }}
 
+    - name: pve_cloudinit_template | add ansible user ssh key
+      command: qm set {{ pct_vmid }} --sshkeys /home/{{ pct_ansible_user }}/.ssh/authorized_keys
+
+    - name: pve_cloudinit_template | setup ip config
+      command: qm set {{ pct_vmid }} --ipconfig0 {{ pct_ipconfig }}
+
+  when: pct_vm_exists.rc != 0
 
