@@ -1,0 +1,30 @@
+---
+- name: create docker network
+  docker_network:
+    name: "{{ docker_pihole_network }}"
+    attachable: yes
+    driver: bridge
+
+- name: create pihole container
+  docker_container:
+    name: pihole
+    image: "{{ docker_pihole_image_name }}:{{ docker_pihole_image_version }}"
+    pull: yes
+    published_ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp"
+      - "443:443/tcp"
+    env:
+      TZ: "{{ docker_pihole_timezone }}"
+      WEBPASSWORD: "{{ docker_pihole_web_password }}"
+    volumes:
+      - "{{ docker_pihole_volume_path }}/etc-pihole/:/etc/pihole/"
+      - "{{ docker_pihole_volume_path }}/etc-dnsmasq.d/:/etc/dnsmasq.d/"
+    hostname: "{{ docker_pihole_hostname }}"
+    purge_networks: yes
+    network_mode: bridge
+    networks: 
+      - name: "{{ docker_pihole_network }}"
+    networks_cli_compatible: no
+    restart_policy: unless-stopped

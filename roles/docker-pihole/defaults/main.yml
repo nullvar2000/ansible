@@ -1,0 +1,7 @@
+---
+docker_pihole_web_password: "badpass01"
+docker_pihole_timezone: "America/New_York"
+docker_pihole_hostname: "{{ inventory_hostname }}"
+docker_pihole_image_version: "latest"
+docker_pihole_volume_base: "/opt/docker_volumes/"
+docker_pihole_volume_path: "{{ docker_pihole_volume_base }}/pihole/"

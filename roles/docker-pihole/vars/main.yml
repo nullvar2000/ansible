@@ -1,0 +1,3 @@
+---
+docker_pihole_network: "pihole-net"
+docker_pihole_image_name: "pihole/pihole"

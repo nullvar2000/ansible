@@ -1,0 +1,24 @@
+---
+- hosts: shadowbroker
+  gather_facts: true
+  become: true
+
+  vars:
+    pip_install_packages:
+      - name: docker
+    docker_pihole_web_password: "badpass01"
+    
+
+  pre_tasks:
+    - name: install setuptools
+      package:
+        name: python3-setuptools
+        state: latest
+        
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
+    - docker-pihole
+
+
+        
