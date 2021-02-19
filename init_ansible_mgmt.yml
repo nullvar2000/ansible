@@ -1,8 +1,26 @@
 ---
-- hosts: shadowbroker
+- hosts: new
   remote_user: root
   gather_facts: true
 
   roles:
     - init_ansible_mgmt
+
+  tasks:
+    - name: set timezone
+      timezone: 
+        name: "America/New_York"
+
+    - name: update with apt
+      apt:
+        update_cache: true
+        upgrade: safe
+      when: ansible_os_family == "Debian"
+
+    - name: update with yum
+      yum:
+        name: "*"
+        state: lastest
+      when: ansible_os_family == "RedHat"
+
     
