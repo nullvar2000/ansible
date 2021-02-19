@@ -4,9 +4,6 @@ ansible
 [windows]
 win01
 
-[shinobi]
-shinboi
-
 [database]
 db
 
