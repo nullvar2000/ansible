@@ -1,0 +1,7 @@
+---
+docker_unifi_controller_network: "unifi-net"
+docker_unifi_controller_image_version: "latest"
+docker_unifi_controller_mem_limit: "1024M"
+docker_unifi_controller_hostname: "unifi"
+docker_unifi_controller_volume_base: "/opt/docker-volumes"
+docker_unifi_controller_volume_path: "{{ docker_unifi_controller_volume_base }}/unifi-controller/"

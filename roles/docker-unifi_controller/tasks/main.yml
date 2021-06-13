@@ -1,0 +1,31 @@
+---
+- name: create docker network
+  docker_network:
+    name: "{{ docker_unifi_controller_network }}"
+    attachable: yes
+    driver: bridge
+
+- name: create unifi controller container
+  docker_container:
+    name: unifi-controller
+    image: "{{ docker_unifi_controller_image_name }}:{{ docker_unifi_controller_image_version }}"
+    pull: yes
+    published_ports:
+      - "3478:3478/udp"
+      - "10001:10001/udp"
+      - "8080:8080"
+      - "8443:8443"
+    env:
+      PUID: "1000"
+      PGID: "1000"
+      MEM_LIMIT: "{{ docker_unifi_controller_mem_limit }}"
+    volumes:
+      - "{{ docker_unifi_controller_volume_path }}/config/:/config/"
+    hostname: "{{ docker_unifi_controller_hostname }}"
+    purge_networks: yes
+    network_mode: bridge
+    networks: 
+      - name: "{{ docker_unifi_controller_network }}"
+    networks_cli_compatible: no
+    restart_policy: unless-stopped
+    
