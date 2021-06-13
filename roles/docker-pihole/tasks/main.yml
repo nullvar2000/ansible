@@ -4,6 +4,8 @@
     name: "{{ docker_pihole_network }}"
     attachable: yes
     driver: bridge
+    ipam_config:
+      - subnet: "{{ docker_pihole_subnet }}"
 
 - name: create pihole container
   docker_container:
@@ -18,6 +20,9 @@
     env:
       TZ: "{{ docker_pihole_timezone }}"
       WEBPASSWORD: "{{ docker_pihole_web_password }}"
+      ServerIP: "{{ docker_pihole_ip }}"
+      DNS1: "{{ docker_pihole_dns1 }}"
+      DNS2: "{{ docker_pihole_dns2 }}"
     volumes:
       - "{{ docker_pihole_volume_path }}/etc-pihole/:/etc/pihole/"
       - "{{ docker_pihole_volume_path }}/etc-dnsmasq.d/:/etc/dnsmasq.d/"
@@ -26,5 +31,10 @@
     network_mode: bridge
     networks: 
       - name: "{{ docker_pihole_network }}"
+        ipv4_address: "{{ docker_pihole_ip }}"
     networks_cli_compatible: no
+    dns_servers:
+      - "127.0.0.1"
+      - "{{ docker_pihole_dns1 }}"
     restart_policy: unless-stopped
+    
