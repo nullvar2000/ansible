@@ -1,0 +1,12 @@
+---
+docker_wireguard_network: "wireguard-net"
+docker_wireguard_subnet: "10.3.10.0/24"
+docker_wireguard_ip: "10.3.10.10"
+docker_wireguard_peers: "1"
+docker_wireguard_peer_dns: "10.3.10.1"
+docker_wireguard_internal_subnet: "10.4.10.0"
+docker_wireguard_image_version: "latest"
+docker_wireguard_timezone: "America/New_York"
+docker_wireguard_hostname: "wireguard"
+docker_wireguard_volume_base: "/opt/docker-volumes"
+docker_wireguard_volume_path: "{{ docker_wireguard_volume_base }}/wireguard"

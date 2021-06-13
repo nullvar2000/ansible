@@ -1,0 +1,40 @@
+---
+- name: create docker network
+  docker_network:
+    name: "{{ docker_wireguard_network }}"
+    attachable: yes
+    driver: bridge
+    ipam_config:
+      - subnet: "{{ docker_wireguard_subnet }}"
+
+- name: create wireguard container
+  docker_container:
+    name: wireguard
+    image: "{{ docker_wireguard_image_name }}:{{ docker_wireguard_image_version }}"
+    pull: yes
+    published_ports:
+      - "51820:51820/udp"
+    volumes:
+      - "{{ docker_wireguard_volume_path }}/config:/config"
+      - "/lib/modules:/lib/modules"
+    hostname: "{{ docker_wireguard_hostname }}"
+    env:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "{{ docker_wireguard_timezone }}"
+      SERVERPORT: "51820"
+      PEERS: "{{ docker_wireguard_peers }}"
+      PEERDNS: "{{ docker_wireguard_peer_dns }}" 
+      INTERNAL_SUBNET: "{{ docker_wireguard_internal_subnet }}"
+    capabilities:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls: 
+      net.ipv4.conf.all.src_valid_mark: 1
+    purge_networks: yes
+    network_mode: bridge
+    networks: 
+      - name: "{{ docker_wireguard_network }}"
+        ipv4_address: "{{ docker_wireguard_ip }}"
+    networks_cli_compatible: no
+    restart_policy: unless-stopped
