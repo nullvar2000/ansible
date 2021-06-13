@@ -1,0 +1,8 @@
+---
+docker_unbound_network: "unbound-net"
+docker_unbound_subnet: "10.3.10.0/24"
+docker_unbound_ip: "10.3.10.10"
+docker_unbound_image_version: "latest"
+docker_unbound_hostname: "unbound"
+docker_unbound_volume_base: "/opt/docker-volumes"
+docker_unbound_volume_path: "{{ docker_unbound_volume_base }}/unbound/opt-unbound-etc-unbound/"

@@ -1,0 +1,43 @@
+---
+- name: create unbound volume directory
+  file:
+    path: "{{ docker_unbound_volume_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: copy unbound config
+  copy:
+    src: "{{ item }}"
+    dest: "{{ docker_unbound_volume_path }}"
+  loop:
+    - a-records.conf
+    - unbound.conf
+
+- name: create docker network
+  docker_network:
+    name: "{{ docker_unbound_network }}"
+    attachable: yes
+    driver: bridge
+    ipam_config:
+      - subnet: "{{ docker_unbound_subnet }}"
+
+- name: create unbound container
+  docker_container:
+    name: unbound
+    image: "{{ docker_unbound_image_name }}:{{ docker_unbound_image_version }}"
+    pull: yes
+    # published_ports:
+    #   - "53:53/tcp"
+    #   - "53:53/udp"
+    volumes:
+      - "{{ docker_unbound_volume_path }}:/opt/unbound/etc/unbound/"
+    hostname: "{{ docker_unbound_hostname }}"
+    purge_networks: yes
+    network_mode: bridge
+    networks: 
+      - name: "{{ docker_unbound_network }}"
+        ipv4_address: "{{ docker_unbound_ip }}"
+    networks_cli_compatible: no
+    restart_policy: unless-stopped
