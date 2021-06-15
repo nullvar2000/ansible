@@ -6,18 +6,34 @@
   vars:
     pip_install_packages:
       - name: docker
-    docker_pihole_web_password: "badpass01"
-    
+    docker_unbound_image_version: "1.13.1"
+    docker_unbound_network: "pihole-net"
+    docker_unbound_subnet: "10.3.10.0/24"
+    docker_unbound_ip: "10.3.10.10"
+
+    docker_pihole_web_password: ""
+    docker_pihole_image_version: "v5.8.1"
+    docker_pihole_network: "pihole-net"
+    docker_pihole_subnet: "10.3.10.0/24"
+    docker_pihole_ip: "10.3.10.20"
+    docker_pihole_dns1: "{{ docker_unbound_ip }}"
+    docker_pihole_dns2: "{{ docker_unbound_ip }}"
 
   pre_tasks:
     - name: install setuptools
       package:
         name: python3-setuptools
         state: latest
-        
+
+    - name: full-upgrade installed packages
+      apt:
+        update_cache: true
+        upgrade: full
+
   roles:
     - geerlingguy.pip
     - geerlingguy.docker
+    - docker-unbound
     - docker-pihole
 
 
