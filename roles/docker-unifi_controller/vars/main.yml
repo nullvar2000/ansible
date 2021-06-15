@@ -1,2 +1,2 @@
 ---
-docker_unifi_controller_image_name: "ghcr.io/linuxserver/unifi-controller"
+docker_unifi_controller_image_name: "linuxserver/unifi-controller"

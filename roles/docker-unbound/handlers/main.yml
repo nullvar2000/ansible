@@ -1,0 +1,5 @@
+---
+- name: restart unbound container
+  docker_container:
+    name: unbound
+    restart: true

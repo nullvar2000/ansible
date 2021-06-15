@@ -1,0 +1,112 @@
+---
+- hosts: mordin
+  gather_facts: true
+  become: true
+
+  vars:
+    install_pkgs:
+      - lm-sensors
+      - hddtemp
+      - fancontrol
+    lm_sensors:
+      - coretemp
+      - it87
+    pip_install_packages:
+      - name: docker
+
+    docker_unifi_controller_image_version: "6.2.25-ls113"
+    
+    docker_unbound_image_version: "1.13.1"
+    docker_unbound_network: "wirehole-net"
+    docker_unbound_subnet: "10.3.10.0/24"
+    docker_unbound_ip: "10.3.10.10"
+
+    docker_pihole_web_password: ""
+    docker_pihole_image_version: "v5.8.1"
+    docker_pihole_network: "wirehole-net"
+    docker_pihole_subnet: "10.3.10.0/24"
+    docker_pihole_ip: "10.3.10.20"
+    docker_pihole_dns1: "{{ docker_unbound_ip }}"
+    docker_pihole_dns2: "{{ docker_unbound_ip }}"
+
+    docker_wireguard_image_version: "v1.0.20210424-ls30"
+    docker_wireguard_network: "wirehole-net"
+    docker_wireguard_subnet: "10.3.10.0/24"
+    docker_wireguard_ip: "10.3.10.30"
+    docker_wireguard_peers: "1"
+    docker_wireguard_peer_dns: "{{ docker_pihole_ip }}"
+    docker_wireguard_internal_subnet: "10.4.10.0"
+
+  pre_tasks:
+
+    - name: full-upgrade installed packages
+      apt:
+        update_cache: true
+        upgrade: full
+
+    - name: install packages
+      apt:
+        pkg: "{{ install_pkgs }}"
+        state: latest
+        install_recommends: true
+
+    - name: configure lm-sensors
+      lineinfile:
+        path: /etc/modules
+        line: "{{ item }}"
+      with_items: "{{ lm_sensors }}"
+      register: modules_added
+
+    - name: reboot system
+      reboot:
+      when: modules_added.changed
+
+    - name: configure fancontrol
+      copy:
+        dest: /etc/fancontrol
+        content: |
+          # Ansible managed
+          INTERVAL=3
+          DEVPATH=hwmon1=devices/platform/coretemp.0 hwmon2=devices/platform/it87.2608
+          DEVNAME=hwmon1=coretemp hwmon2=it8728
+          FCTEMPS=hwmon2/pwm1=hwmon1/temp1_input
+          FCFANS= hwmon2/pwm1=hwmon2/fan1_input
+          MINTEMP=hwmon2/pwm1=20
+          MAXTEMP=hwmon2/pwm1=75
+          MINSTART=hwmon2/pwm1=150
+          MINSTOP=hwmon2/pwm1=0
+      notify:
+        - restart fancontrol
+
+    - name: enable fancontrol service
+      service:
+        name: fancontrol
+        state: started
+        enabled: true
+
+    - name: stop and disable systemd-resolved
+      service:
+        name: systemd-resolved
+        state: stopped
+        enabled: false
+
+    - name: replace systemd-resolved with quad-nine
+      lineinfile:
+        path: /etc/resolv.conf
+        regexp: '^nameserver'
+        line: 'nameserver 9.9.9.9'
+      failed_when: false
+
+  handlers: 
+    - name: restart fancontrol
+      service:
+        name: fancontrol
+        state: restarted
+
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
+    - docker-unifi_controller
+    - docker-unbound
+    - docker-pihole
+    - docker-wireguard
