@@ -1,0 +1,34 @@
+---
+- hosts: proxmox
+  gather_facts: true
+  become: true
+  
+  vars:
+      pct_disk_store: hdd750
+
+  roles:
+    - role: ironicbadger.ansible_role_proxmox_nag_removal
+    - role: pve_cloudinit_template
+      vars:
+        pct_template_name: ubuntu-20.04-focal
+        pct_template_url: https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img
+        pct_vmid: 8000
+    - role: pve_cloudinit_template
+      vars:
+        pct_template_name: debian-10-buster
+        pct_template_url: https://cloud.debian.org/images/cloud/buster/20210208-542/debian-10-generic-amd64-20210208-542.qcow2
+        pct_vmid: 8001
+    - role: pve_cloudinit_template
+      vars:
+        pct_template_name: alma-8.5
+        pct_template_url: https://repo.almalinux.org/almalinux/8/cloud/x86_64/images/AlmaLinux-8-GenericCloud-8.5-20211119.x86_64.qcow2
+        pct_vmid: 8002
+    
+  post_tasks:
+
+    - name: update apt cache
+      apt:
+        update_cache: true
+        upgrade: safe
+        cache_valid_time: 86400 # one day
+        

@@ -6,12 +6,13 @@
   vars:
     ias_hostname: ansible
     ias_packages:
+      - epel-release
       - sudo
       - git
       - unzip
       - openssh-server
       - tar
-      - sshpass
+      - sshpass # might need epel-release installed seperately first
     ias_ansible_user: ansible
     ias_github_user: nullvar2000
     ias_github_project: ansible
