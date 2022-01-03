@@ -1,0 +1,6 @@
+---
+
+terraform_repo_url: "https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable"
+terraform_repo_key: "https://rpm.releases.hashicorp.com/gpg"
+terraform_repo_name: "Hashicorp-terraform"
+terraform_repo_desc: "Hashicorp terraform repo"

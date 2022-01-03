@@ -1,0 +1,17 @@
+---
+
+- name: add terraform repo
+  yum_repository:
+    name: "{{ terraform_repo_name }}"
+    description: "{{ terraform_repo_desc }}"
+    baseurl: "{{ terraform_repo_url }}"
+    gpgkey: "{{ terraform_repo_key }}"
+    gpgcheck: true
+    enabled: true
+    state: present
+
+- name: install terraform
+  yum:
+    name: terraform
+    state: latest
+

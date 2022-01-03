@@ -10,6 +10,8 @@
       - git
       - unzip
       - openssh-server
+      - tar
+      - sshpass
     ias_ansible_user: ansible
     ias_github_user: nullvar2000
     ias_github_project: ansible
@@ -97,4 +99,5 @@
           - "Be sure to add public key to githhub"
           - "{{ ias_user.ssh_public_key }}"
       
-    
+  roles:
+    - terraform_server
