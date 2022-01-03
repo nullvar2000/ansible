@@ -14,22 +14,22 @@
     pip_install_packages:
       - name: docker
 
-    docker_unifi_controller_image_version: "6.2.25-ls113"
+    docker_unifi_controller_image_version: "6.5.55"
     
-    docker_unbound_image_version: "1.13.1"
+    docker_unbound_image_version: "1.14.0"
     docker_unbound_network: "wirehole-net"
     docker_unbound_subnet: "10.3.10.0/24"
     docker_unbound_ip: "10.3.10.10"
 
     docker_pihole_web_password: ""
-    docker_pihole_image_version: "v5.8.1"
+    docker_pihole_image_version: "2021.12.1"
     docker_pihole_network: "wirehole-net"
     docker_pihole_subnet: "10.3.10.0/24"
     docker_pihole_ip: "10.3.10.20"
     docker_pihole_dns1: "{{ docker_unbound_ip }}"
     docker_pihole_dns2: "{{ docker_unbound_ip }}"
 
-    docker_wireguard_image_version: "v1.0.20210424-ls30"
+    docker_wireguard_image_version: "1.0.20210914"
     docker_wireguard_network: "wirehole-net"
     docker_wireguard_subnet: "10.3.10.0/24"
     docker_wireguard_ip: "10.3.10.30"
