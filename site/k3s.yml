@@ -1,0 +1,43 @@
+---
+
+# using roles from https://github.com/k3s-io/k3s-ansible
+
+- hosts: k3s_cluster
+  gather_facts: yes
+  become: yes
+
+  pre_tasks:
+
+    - name: update all packages
+      apt:
+        name: "*"
+        state: latest
+
+    - name: install qemu-guest-agent
+      apt: 
+        name: qemu-guest-agent
+        state: latest
+        update_cache: false
+
+    - name: enable qemu-guest-agent service
+      ansible.builtin.systemd:
+        name: qemu-guest-agent
+        state: started
+        enabled: true
+    
+    - name: reboot
+      reboot:
+
+  roles:
+    - role: k3s/prereq
+    - role: k3s/download
+
+- hosts: k3s_server
+  become: yes
+  roles:
+    - role: k3s/install/master
+
+- hosts: k3s_agents
+  become: yes
+  roles:
+    - role: k3s/install/node
