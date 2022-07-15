@@ -1,0 +1,45 @@
+---
+- hosts: miranda
+  gather_facts: true
+  become: true
+
+  vars:
+    install_pkgs:
+      - nfs-common
+      - qemu-guest-agent
+    pip_install_packages:
+      - name: docker
+
+  pre_tasks:
+
+    - name: install packages
+      apt:
+        pkg: "{{ install_pkgs }}"
+        state: latest
+        install_recommends: true
+
+    - name: full-upgrade installed packages
+      apt:
+        name: '*'
+        state: latest
+
+    - name: Mount data1 volume
+      ansible.posix.mount:
+        src: kasumi:/data/Backup
+        path: /mnt/data1
+        opts: rw,sync,hard,intr
+        state: mounted
+        fstype: nfs
+
+    - name: Mount data2 volume
+      ansible.posix.mount:
+        src: kasumi:/data/Media
+        path: /mnt/data2
+        opts: rw,sync,hard,intr
+        state: mounted
+        fstype: nfs
+
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
+    - docker-syncthing

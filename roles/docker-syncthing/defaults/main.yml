@@ -1,0 +1,7 @@
+---
+docker_syncthing_image_version: "1.19.0"
+docker_syncthing_hostname: "syncthing"
+docker_syncthing_volume_base: "/opt/docker-volumes"
+docker_syncthing_volume_path: "{{ docker_syncthing_volume_base }}/syncthing"
+docker_syncthing_data1_path: "/mnt/data1"
+docker_syncthing_data2_path: "/mnt/data2"

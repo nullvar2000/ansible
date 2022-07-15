@@ -1,0 +1,22 @@
+---
+
+- name: create syncthing container
+  docker_container:
+    name: syncthing
+    image: "{{ docker_syncthing_image_name }}:{{ docker_syncthing_image_version }}"
+    pull: yes
+    published_ports:
+      - "8384:8384"
+      - "22000:22000/tcp"
+      - "22000:22000/udp"
+      - "21027:21027/udp"
+    env:
+      PUID: "1000"
+      PGID: "1000"
+    volumes:
+      - "{{ docker_syncthing_volume_path }}/config/:/config/"
+      - "{{ docker_syncthing_data1_path }}/:/mnt/data1/"
+      - "{{ docker_syncthing_data2_path }}/:/mnt/data2/"
+    hostname: "{{ docker_syncthing_hostname }}"
+    restart_policy: unless-stopped
+    
