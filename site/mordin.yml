@@ -1,5 +1,5 @@
 ---
-- hosts: mordin
+- hosts: 10.5.10.30
   gather_facts: true
   become: true
 
@@ -14,15 +14,15 @@
     pip_install_packages:
       - name: docker
 
-    docker_unifi_controller_image_version: "6.5.55"
+    docker_unifi_controller_image_version: "7.1.66"
     
-    docker_unbound_image_version: "1.14.0"
+    docker_unbound_image_version: "1.15.0"
     docker_unbound_network: "wirehole-net"
     docker_unbound_subnet: "10.3.10.0/24"
     docker_unbound_ip: "10.3.10.10"
 
     docker_pihole_web_password: ""
-    docker_pihole_image_version: "2021.12.1"
+    docker_pihole_image_version: "2022.07.1"
     docker_pihole_network: "wirehole-net"
     docker_pihole_subnet: "10.3.10.0/24"
     docker_pihole_ip: "10.3.10.20"
@@ -110,3 +110,14 @@
     - docker-unbound
     - docker-pihole
     - docker-wireguard
+
+  # post_tasks:
+
+  #   - name: add dnsmasq file to pihole
+  #     copy:
+  #       dest: /opt/docker-volumes/pihole/etc-dnsmasq.d/09-custom-dns.conf
+  #       content: |
+  #         address=/legion.lan/10.5.10.71
+  #       owner: root
+  #       group: root
+  #       mode: '0644'
