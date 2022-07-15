@@ -37,4 +37,5 @@
       - "127.0.0.1"
       - "{{ docker_pihole_dns1 }}"
     restart_policy: unless-stopped
+    shm_size: 512M
     
