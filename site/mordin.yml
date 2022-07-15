@@ -33,7 +33,7 @@
     docker_wireguard_network: "wirehole-net"
     docker_wireguard_subnet: "10.3.10.0/24"
     docker_wireguard_ip: "10.3.10.30"
-    docker_wireguard_peers: "1"
+    docker_wireguard_peers: "pixel_6, hp_x360, pixel_6_pro"
     docker_wireguard_peer_dns: "{{ docker_pihole_ip }}"
     docker_wireguard_internal_subnet: "10.4.10.0"
 
