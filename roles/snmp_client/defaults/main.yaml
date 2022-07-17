@@ -1,0 +1,4 @@
+snmp_manager: localhost
+snmp_community: public
+snmp_location: office
+snmp_contact: me@noob.com

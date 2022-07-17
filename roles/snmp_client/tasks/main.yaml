@@ -1,0 +1,26 @@
+- name: install snmpd
+  package:
+    name: 
+      - snmpd
+      - snmp-mibs-downloader
+    state: latest
+
+- name: configure snmpd
+  lineinfile:
+    path: /etc/snmp/snmpd.conf
+    regexp: '^{{ item.option }} '
+    insertafter: '^#{{ item.option }} '
+    line: '{{ item.value }}'
+  loop:
+    - { option: 'sysLocation', value: 'sysLocation {{ snmp_location }}' }
+    - { option: 'sysContact', value: 'sysContact {{ snmp_contact }}' }
+    - { option: 'agentaddress', value: 'agentaddress udp:161' }
+    - { option: 'rocommunity', value: 'rocommunity {{ snmp_community }} {{ snmp_manager }}' }
+    - { option: 'rocommunity6', value: '' }
+
+- name: (re)start snmpd service
+  systemd:
+    name: snmpd
+    state: restarted
+
+
