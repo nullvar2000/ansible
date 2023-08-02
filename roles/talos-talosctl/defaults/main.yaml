@@ -1,0 +1,8 @@
+talosctl_install_version: v1.4.6
+talosctl_install_location: /usr/local/bin/talosctl
+talosctl_config_directory: ~/.talos
+talosctl_config_name: talos-cluster
+talosctl_config_endpoints: []
+talosctl_config_ca: ''
+talosctl_config_crt: ''
+talosctl_config_key: ''

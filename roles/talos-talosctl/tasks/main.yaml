@@ -1,0 +1,22 @@
+- name: download talosctl {{ talosctl_install_version }}
+  get_url:
+    url: https://github.com/siderolabs/talos/releases/download/{{ talosctl_install_version }}/talosctl-linux-amd64
+    dest: "{{ talosctl_install_location }}"
+    mode: '0755'
+  become: true
+
+- name: setup talosconfig
+  block: 
+    - name: creating talos config directory
+      file:
+        path: "{{ talosctl_config_directory }}"
+        state: directory
+        mode: 0700
+
+    - name: copy talos config file
+      template:
+        src: .talos/config.j2
+        dest: "{{ talosctl_config_directory }}/config"
+        mode: 0600
+        backup: true
+  when: talosctl_config_endpoints|length > 0 and talosctl_config_ca |length > 0 and talosctl_config_crt |length > 0 and talosctl_config_key |length > 0
