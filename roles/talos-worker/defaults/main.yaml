@@ -1,0 +1,2 @@
+talos_worker_node: 192.168.1.100
+talos_worker_config_directory: ~/.talos

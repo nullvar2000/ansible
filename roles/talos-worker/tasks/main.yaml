@@ -1,0 +1,4 @@
+- name: apply config to node {{ talos_worker_node }}
+  shell:
+    cmd: talosctl apply-config --insecure --nodes {{ talos_worker_node }} --file {{ talos_worker_config_directory }}/worker.yaml
+
